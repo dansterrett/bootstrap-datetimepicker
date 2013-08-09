@@ -54,9 +54,14 @@
       this.pickDate = options.pickDate;
       this.pickTime = options.pickTime;
       this.isInput = this.$element.is('input');
-      this.component = false;
-      if (this.$element.find('.input-append') || this.$element.find('.input-prepend'))
-          this.component = this.$element.find('.add-on');
+
+      // Check to see if using bootstrap version 3
+      this.component = this.$element.find('.input-group-addon');
+      usev3 = this.component.length > 0;
+      if (!usev3) this.component = this.$element.find('.add-on');
+
+      if (this.component.length === 0) this.component = false;
+
       this.format = options.format;
       if (!this.format) {
         if (this.isInput) this.format = this.$element.data('format');
@@ -67,7 +72,6 @@
       if (this.component) {
         icon = this.component.find('i');
       }
-      usev3 = icon.parent().hasClass('input-group-addon');
       if (this.pickTime) {
         if (icon && icon.length) this.timeIcon = icon.data('time-icon');
         if (!this.timeIcon) this.timeIcon = (usev3?'glyph':'') + 'icon-time';
@@ -158,7 +162,12 @@
       this.widget.hide();
       this.viewMode = this.startViewMode;
       this.showMode();
+
+      var $input = this.$element.find('input');
+      var inputValue = $input.val();
       this.set();
+      if (inputValue !== $input.val()) this.notifyChange();
+      
       this.$element.trigger({
         type: 'hide',
         date: this._date
@@ -1252,12 +1261,12 @@
         (is12Hours ? ' data-hour-format="12"' : '') +
         '>' +
         '<tr>' +
-          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="incrementHours"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-up"></i></a></td>' +
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="incrementHours"><i class="'+(usev3?'glyphicon glyphicon-chevron-up':'')+' icon-chevron-up"></i></a></td>' +
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="incrementMinutes"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-up"></i></a></td>' +
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="incrementMinutes"><i class="'+(usev3?'glyphicon glyphicon-chevron-up':'')+' icon-chevron-up"></i></a></td>' +
           (showSeconds ?
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="incrementSeconds"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-up"></i></a></td>': '')+
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="incrementSeconds"><i class="'+(usev3?'glyphicon glyphicon-chevron-up':'')+' icon-chevron-up"></i></a></td>': '')+
           (is12Hours ? '<td class="separator"></td>' : '') +
         '</tr>' +
         '<tr>' +
@@ -1274,12 +1283,12 @@
           '</td>' : '') +
         '</tr>' +
         '<tr>' +
-          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="decrementHours"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-down"></i></a></td>' +
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="decrementHours"><i class="'+(usev3?'glyphicon glyphicon-chevron-down':'')+' icon-chevron-down"></i></a></td>' +
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="decrementMinutes"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-down"></i></a></td>' +
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="decrementMinutes"><i class="'+(usev3?'glyphicon glyphicon-chevron-down':'')+' icon-chevron-down"></i></a></td>' +
           (showSeconds ?
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="decrementSeconds"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-down"></i></a></td>': '') +
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="decrementSeconds"><i class="'+(usev3?'glyphicon glyphicon-chevron-down':'')+' icon-chevron-down"></i></a></td>': '') +
           (is12Hours ? '<td class="separator"></td>' : '') +
         '</tr>' +
       '</table>' +
