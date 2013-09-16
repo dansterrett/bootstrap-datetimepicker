@@ -56,7 +56,7 @@
       this.isInput = this.$element.is('input');
 
       // Check to see if using bootstrap version 3
-      this.component = this.$element.find('.input-group-addon');
+      this.component = this.$element.find('.input-group-addon').first();
       usev3 = this.component.length > 0;
       if (!usev3) this.component = this.$element.find('.add-on');
 
@@ -1014,6 +1014,11 @@
           this.$element.on('click', $.proxy(this.show, this));
         }
       }
+      
+      this.$element.on('click', '.clear-date', function() {
+        self.setDate(null);
+        self.notifyChange();
+      });
     },
 
     _attachDatePickerGlobalEvents: function() {
